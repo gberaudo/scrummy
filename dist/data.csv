@@ -1,0 +1,4 @@
+#,"Scrum logs, for directions contact guillaume.beraudo@camptocamp.com",,,,,,,,,,,,,,,,,,,
+#,,,,,Dates,,"Story points",,Man-days,,Happyness,,,,,Methodology,,,,
+Project,Sprint,Length,Velocity,Devs,From,To,Delivered,Total,Done,Planned,Client,Direction,Devs,PO,SM,Dailies,Grooming,Demo,Retro,Planning
+SAC_SCHM,42,2,1.0909090909090908,6,43300,43307,24,24,22,24.75,"+ / +",NSOW,"4+, 1=, 1~",+,+,1,1,1,1,1

@@ -1,0 +1,41 @@
+{
+  "name": "scrummy",
+  "version": "1.0.0",
+  "description": "Scrum monitoring",
+  "main": "src/index.js",
+  "private": true,
+  "scripts": {
+    "build": "webpack --mode development",
+    "start": "webpack-dev-server --mode development --content-base dist --watch-content-base --compress --watch -d",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/gberaudo/scrummy.git"
+  },
+  "keywords": [
+    "scrum",
+    "monitoring",
+    "graphs"
+  ],
+  "author": "Guillaume Beraudo",
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/gberaudo/scrummy/issues"
+  },
+  "homepage": "https://github.com/gberaudo/scrummy#readme",
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "babel-loader": "^8.0.5",
+    "chart.js": "^2.8.0",
+    "papaparse": "^4.6.3",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.3.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
+    "tabulator-tables": "^4.2.5"
+  }
+}
