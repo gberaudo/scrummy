@@ -8,7 +8,7 @@ export class Chart extends Component {
   componentDidMount() {
     const el = this.el;
     const ctx = el.getContext('2d');
-    this.chart = this.props.factory(ctx, this.props.data);
+    this.chart = this.props.factory(ctx, this.props.data, this.props.select);
   }
   
   componentWillUnmount() {

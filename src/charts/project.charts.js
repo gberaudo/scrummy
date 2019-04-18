@@ -123,9 +123,19 @@ function createHealthDataset(data) {
   };
 }
 
-function createTimeOptions() {
+function createOnClickFunction(data, onItemClicked) {
+  return function(evt, elements) {
+    if (elements.length > 0) {
+      const idx = elements[0]._index;
+      onItemClicked(data[idx]);
+    }
+  }
+}
+
+function createTimeOptions(onClick) {
   return {
     responsive: true,
+    onClick,
     scales: {
       xAxes: [{
         type: 'time',
@@ -136,19 +146,16 @@ function createTimeOptions() {
         }
       }]
     },
-    tooltips: {
-      mode: 'index',
-      intersect: false,
-    },
   };
 }
 
-export function createVelocityChart(ctx, data) {
+export function createVelocityChart(ctx, data, onItemClicked) {
   const labels = data.map(l => l.To).reverse();
   const datasets = [
     createVelocityDataset(data)
   ];
-  const options = createTimeOptions();
+  const onClick = createOnClickFunction(data, onItemClicked);
+  const options = createTimeOptions(onClick);
   return new Chart(ctx, {
     type: 'line',
     data: {
@@ -159,12 +166,13 @@ export function createVelocityChart(ctx, data) {
   });
 }
 
-export function createTotalChart(ctx, data) {
+export function createTotalChart(ctx, data, onItemClicked) {
   const labels = data.map(l => l.To).reverse();
   const datasets = [
     createTotalDataset(data)
   ];
-  const options = createTimeOptions();
+  const onClick = createOnClickFunction(data, onItemClicked);
+  const options = createTimeOptions(onClick);
   return new Chart(ctx, {
     type: 'line',
     data: {
@@ -175,12 +183,13 @@ export function createTotalChart(ctx, data) {
   });
 }
 
-export function createHealthChart(ctx, data) {
+export function createHealthChart(ctx, data, onItemClicked) {
   const labels = data.map(l => l.To).reverse();
   const datasets = [
     createHealthDataset(data)
   ];
-  const options = createTimeOptions();
+  const onClick = createOnClickFunction(data, onItemClicked);
+  const options = createTimeOptions(onClick);
   return new Chart(ctx, {
     type: 'line',
     data: {
