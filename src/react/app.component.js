@@ -31,6 +31,7 @@ export class AppPage extends Component {
     if (this.state.project) {
       return (
         <div className="App">
+          <a href="/">Display global data</a>
           <EditData></EditData>
           <ProjectPage project={this.state.project} data={this.state.data}></ProjectPage>
         </div>
