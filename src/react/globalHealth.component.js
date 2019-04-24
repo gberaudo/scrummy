@@ -11,7 +11,7 @@ export class GlobalHealth extends Component {
   render() {
     return (
       <div>
-        <span>C2C projects health</span>
+        <span>Projects health</span>
         <Score value={this.globalHealth}></Score>
       </div>
     );

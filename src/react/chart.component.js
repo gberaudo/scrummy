@@ -3,21 +3,40 @@ import React, { Component} from "react";
 export class Chart extends Component {
   constructor(props) {
     super(props);
+    this.chart_ = null;
+    this.el;
   }
 
   componentDidMount() {
-    const el = this.el;
-    const ctx = el.getContext('2d');
-    this.chart = this.props.factory(ctx, this.props.data, this.props.select);
+    this.createChart_();
   }
   
+  createChart_() {
+    if (this.props.data) {
+      const el = this.el;
+      const ctx = el.getContext('2d');
+      this.chart_ = this.props.factory(ctx, this.props.data, this.props.select);
+    }
+  }
+
+  destroyChart_() {
+    if (this.chart_) {
+      this.chart_.destroy();
+      this.chart_ = null;
+    }
+  }
+
   componentWillUnmount() {
-    this.chart.destroy();
+    this.chart_.destroy();
   }
 
   render() {
+    if (this.el) {
+      this.destroyChart_();
+      this.createChart_();
+    }
     return (
-      <div style={{width: 400, display: 'inline-block'}}>
+      <div style={{width: '450px', display: 'inline-block'}}>
         <canvas ref={el => this.el = el}></canvas>
       </div>
     );

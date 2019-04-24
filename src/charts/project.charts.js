@@ -1,5 +1,7 @@
 import Chart from 'chart.js';
+import {computeMean} from '../indicators';
 
+const someColors = ['#3366CC','#DC3912','#FF9900','#109618','#990099','#3B3EAC','#0099C6','#DD4477','#66AA00','#B82E2E','#316395','#994499','#22AA99','#AAAA11','#6633CC','#E67300','#8B0707','#329262','#5574A6','#3B3EAC'];
 
 export function createDataSets(data) {
   return [{
@@ -96,23 +98,34 @@ export function createTemporalLineChart(ctx, labels, datasets) {
   });
 }
 
-function createVelocityDataset(data) {
+function createColoredDataset(data, key, color, valuefn = a => a, label) {
   return {
     fill: false,
-    label: 'Velocity',
-    borderColor: 'rgb(54, 162, 235)',
-    data: data.map(l => l.Velocity).reverse()
+    label: label || key,
+    borderColor: color, // 'rgb(54, 162, 235)'
+    data: data.map(l => valuefn(l[key])).reverse()
   };
 }
 
-function createTotalDataset(data) {
-  return {
+
+function createClientDatasets(data) {
+  const n = data[0].ClientNumbers.length;
+  const datass = [];
+  data.forEach(l => {
+      for (let i = 0; i < n; ++i) {
+          const array = datass[i] = datass[i] || [];
+          const value = l.ClientNumbers[i];
+          array.push(value);
+      }   
+  });
+  return datass.map((d, i) => ({
     fill: false,
-    label: 'Total',
-    borderColor: 'rgb(154, 162, 235)',
-    data: data.map(l => l.Total).reverse()
-  };
+    label: `Client ${i + 1}`,
+    borderColor: someColors[i],
+    data: d.reverse()
+  }));
 }
+
 
 function createHealthDataset(data) {
   return {
@@ -132,47 +145,33 @@ function createOnClickFunction(data, onItemClicked) {
   }
 }
 
-function createTimeOptions(onClick) {
+function createTimeScale() {
   return {
-    responsive: true,
-    onClick,
-    scales: {
-      xAxes: [{
-        type: 'time',
-        time: {
-          displayFormats: {
-            quarter: 'MMM YYYY'
-          }
+    xAxes: [{
+      type: 'time',
+      time: {
+        displayFormats: {
+          quarter: 'MMM YYYY'
         }
-      }]
-    },
+      }
+    }]
   };
 }
 
-export function createVelocityChart(ctx, data, onItemClicked) {
-  const labels = data.map(l => l.To).reverse();
-  const datasets = [
-    createVelocityDataset(data)
-  ];
-  const onClick = createOnClickFunction(data, onItemClicked);
-  const options = createTimeOptions(onClick);
-  return new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels,
-      datasets
-    },
-    options
-  });
+function createTemporalLabels(data) {
+  return data.map(l => l.To).reverse();
 }
 
-export function createTotalChart(ctx, data, onItemClicked) {
-  const labels = data.map(l => l.To).reverse();
+export function createVelocityChart(ctx, data, onItemClicked) {
+  const labels = createTemporalLabels(data);
   const datasets = [
-    createTotalDataset(data)
+    createColoredDataset(data, 'Velocity', 'rgb(54, 262, 235)')
   ];
-  const onClick = createOnClickFunction(data, onItemClicked);
-  const options = createTimeOptions(onClick);
+  const options = {
+    responsive: true,
+    onClick: createOnClickFunction(data, onItemClicked),
+    scales: createTimeScale()
+  };
   return new Chart(ctx, {
     type: 'line',
     data: {
@@ -184,12 +183,15 @@ export function createTotalChart(ctx, data, onItemClicked) {
 }
 
 export function createHealthChart(ctx, data, onItemClicked) {
-  const labels = data.map(l => l.To).reverse();
+  const labels = createTemporalLabels(data);
   const datasets = [
     createHealthDataset(data)
   ];
-  const onClick = createOnClickFunction(data, onItemClicked);
-  const options = createTimeOptions(onClick);
+  const options = {
+    responsive: true,
+    onClick: createOnClickFunction(data, onItemClicked),
+    scales: createTimeScale()
+  };
   return new Chart(ctx, {
     type: 'line',
     data: {
@@ -197,5 +199,119 @@ export function createHealthChart(ctx, data, onItemClicked) {
       datasets
     },
     options
+  });
+}
+
+function createMultiChart({ctx, data, datasets, onItemClicked}) {
+  const labels = createTemporalLabels(data);
+  const options = {
+    responsive: true,
+    onClick: createOnClickFunction(data, onItemClicked),
+    scales: {
+      xAxes: [{
+        type: 'time',
+        time: {
+          displayFormats: {
+            quarter: 'MMM YYYY'
+          }
+        }
+      }]
+    }
+  };
+  return new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets
+    },
+    options
+  });
+}
+
+
+export function createDaysChart(ctx, data, onItemClicked) {
+  const keys = ['Done', 'Planned'];
+  const datasets = keys.map((key, i) => createColoredDataset(data, key, someColors[i]));
+  return createMultiChart({ctx, data, datasets, onItemClicked});
+}
+
+export function createPointsChart(ctx, data, onItemClicked) {
+  const keys = ['Delivered', 'Total'];
+  const datasets = keys.map((key, i) => createColoredDataset(data, key, someColors[i]));
+  return createMultiChart({ctx, data, datasets, onItemClicked});
+}
+
+export function createClientChart(ctx, data, onItemClicked) {
+  const datasets = createClientDatasets(data);
+  return createMultiChart({ctx, data, datasets, onItemClicked});
+}
+
+export function createFeedbacksChart(ctx, data, onItemClicked) {
+  const keys = ['Client', 'Devs', 'PO', 'SM', 'Direction'];
+  const valueFn = array => computeMean(array);
+  const labels = createTemporalLabels(data);
+  const datasets = keys.map((key, i) => createColoredDataset(data, key + 'Numbers', someColors[i], valueFn, key));
+  const options = {
+    responsive: true,
+    onClick: createOnClickFunction(data, onItemClicked),
+    scales: {
+      xAxes: [{
+        type: 'time',
+        time: {
+          displayFormats: {
+            quarter: 'MMM YYYY'
+          }
+        }
+      }],
+      yAxes: [{
+        ticks: {
+            min: 0,
+            max: 8
+        },
+      }
+    ]}
+    };
+  return new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets
+    },
+    options
+  });
+}
+
+export function createFeedbacksRadarChart(ctx, line) {
+  const labels = [
+    'Client',
+    'Devs',
+    'PO',
+    'Direction',
+    'SM'
+  ];
+  const datasets = [{
+    label: `Sprint ${line.Sprint} feedbacks`,
+    data: [
+      computeMean(line.ClientNumbers),
+      computeMean(line.DevsNumbers),
+      computeMean(line.PONumbers),
+      computeMean(line.DirectionNumbers),
+      computeMean(line.SMNumbers),
+    ].map(n => Number.isNaN(n) ? 0 : n)
+  }];
+  return new Chart(ctx, {
+    type: 'radar',
+    options: {
+      scale: {
+        ticks: {
+          min: 0,
+          max: 8
+        }
+      }
+    },
+    data: {
+      labels,
+      datasets
+    },
   });
 }

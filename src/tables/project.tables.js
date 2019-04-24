@@ -3,6 +3,7 @@ import Tabulator from 'tabulator-tables';
 
 export function createProjectTable(selector, data, onRowClicked) {
   return new Tabulator(selector, {
+    selectable: 1,
     data,
     layout:"fitColumns",
     rowClick(e, row) {
