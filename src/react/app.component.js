@@ -9,6 +9,9 @@ export class AppPage extends Component {
   constructor(props) {
     super(props);
     this.onProjectChange = this.onProjectChange.bind(this);
+    const url = new URL(document.location);
+    url.searchParams.delete('project');
+    this.mainPageUrl = url.toString();
     
     this.state = {
       project: this.getProjectFromUrl(),
@@ -31,7 +34,7 @@ export class AppPage extends Component {
     if (this.state.project) {
       return (
         <div className="App">
-          <a href="/">Display global data</a>
+          <a href={this.mainPageUrl}>Display global data</a>
           <EditData></EditData>
           <ProjectPage project={this.state.project} data={this.state.data}></ProjectPage>
         </div>
