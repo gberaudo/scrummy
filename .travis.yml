@@ -1,0 +1,13 @@
+dist: xenial
+language: node_js
+node_js: lts/*
+
+deploy:
+  provider: pages
+  verbose: true
+  local_dir: dist
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  keep_history: true
+  on:
+    branch: master
