@@ -31,22 +31,29 @@ export class AppPage extends Component {
   }
 
   render() {
+    let content;
     if (this.state.project) {
-      return (
-        <div className="App">
+      content = (
+        <>
           <a href={this.mainPageUrl}>Display global data</a>
-          <EditData></EditData>
           <ProjectPage project={this.state.project} data={this.state.data}></ProjectPage>
-        </div>
+        </>
       );
     } else {
-      return (
-        <div className="App">
-          <EditData></EditData>
+      content = (
+        <>
           <GlobalHealth data={this.state.data}></GlobalHealth>
           <MainPage changeProject={this.onProjectChange} data={this.state.data}></MainPage>
-        </div>
+        </>
       );
     }
+    return (
+     <React.StrictMode>
+        <div className="App">
+          <EditData></EditData>
+          {content}
+        </div>
+      </React.StrictMode>
+    );
   }
 }
