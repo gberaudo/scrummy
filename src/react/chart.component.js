@@ -1,6 +1,6 @@
-import React, { Component} from "react";
+import React, { PureComponent} from "react";
 
-export class Chart extends Component {
+export class Chart extends PureComponent {
   constructor(props) {
     super(props);
     this.chart_ = null;
