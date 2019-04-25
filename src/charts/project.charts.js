@@ -1,102 +1,6 @@
-import Chart from 'chart.js';
 import {computeMean} from '../indicators';
 
 const someColors = ['#3366CC','#DC3912','#FF9900','#109618','#990099','#3B3EAC','#0099C6','#DD4477','#66AA00','#B82E2E','#316395','#994499','#22AA99','#AAAA11','#6633CC','#E67300','#8B0707','#329262','#5574A6','#3B3EAC'];
-
-export function createDataSets(data) {
-  return [{
-    yAxisID: 'y-axis-velocity',
-    fill: false,
-    label: 'Velocity',
-    borderColor: 'rgb(54, 162, 235)',
-    data: data.map(l => l.Velocity).reverse()
-  }, {
-    yAxisID: 'y-axis-points-days',
-    fill: false,
-    label: 'Days done',
-    borderColor: 'rgb(12, 12, 235)',
-    data: data.map(l => l.Done).reverse()
-  },
-  {
-    yAxisID: 'y-axis-points-days',
-    fill: false,
-    label: 'Delivered story points',
-    borderColor: 'rgb(12, 12, 35)',
-    data: data.map(l => l.Delivered).reverse()
-  }];
-}
-
-export function createLineChart(ctx, labels, datasets) {
-  return new Chart(ctx, {
-    // The type of chart we want to create
-    type: 'line',
-  
-    // The data for our dataset
-    data: {
-        labels,
-        datasets
-    },
-  
-    // Configuration options go here
-    options: {
-      responsive: true,
-      scales: {
-        yAxes: [{
-          id: "y-axis-velocity",
-          ticks: {
-              min: 0
-          },
-        }, {
-          id: "y-axis-points-days"
-        }]
-      },
-      tooltips: {
-        mode: 'index',
-        intersect: false,
-      },
-    }
-  });
-}
-
-export function createTemporalLineChart(ctx, labels, datasets) {
-  return new Chart(ctx, {
-    // The type of chart we want to create
-    type: 'line',
-  
-    // The data for our dataset
-    data: {
-        labels,
-        datasets
-    },
-  
-    // Configuration options go here
-    options: {
-      responsive: true,
-      scales: {
-        xAxes: [{
-          type: 'time',
-          time: {
-            displayFormats: {
-              quarter: 'MMM YYYY'
-            }
-          }
-        }],
-        yAxes: [{
-          id: "y-axis-velocity",
-          ticks: {
-              min: 0
-          },
-        }, {
-          id: "y-axis-points-days"
-        }]
-      },
-      tooltips: {
-        mode: 'index',
-        intersect: false,
-      },
-    }
-  });
-}
 
 function createColoredDataset(data, key, color, valuefn = a => a, label) {
   return {
@@ -162,7 +66,7 @@ function createTemporalLabels(data) {
   return data.map(l => l.To).reverse();
 }
 
-export function createVelocityChart(ctx, data, onItemClicked) {
+export function createVelocityChart(data, onItemClicked) {
   const labels = createTemporalLabels(data);
   const datasets = [
     createColoredDataset(data, 'Velocity', 'rgb(54, 262, 235)')
@@ -172,17 +76,17 @@ export function createVelocityChart(ctx, data, onItemClicked) {
     onClick: createOnClickFunction(data, onItemClicked),
     scales: createTimeScale()
   };
-  return new Chart(ctx, {
+  return {
     type: 'line',
     data: {
       labels,
       datasets
     },
     options
-  });
+  };
 }
 
-export function createHealthChart(ctx, data, onItemClicked) {
+export function createHealthChart(data, onItemClicked) {
   const labels = createTemporalLabels(data);
   const datasets = [
     createHealthDataset(data)
@@ -192,17 +96,17 @@ export function createHealthChart(ctx, data, onItemClicked) {
     onClick: createOnClickFunction(data, onItemClicked),
     scales: createTimeScale()
   };
-  return new Chart(ctx, {
+  return {
     type: 'line',
     data: {
       labels,
       datasets
     },
     options
-  });
+  };
 }
 
-function createMultiChart({ctx, data, datasets, onItemClicked}) {
+function createMultiChart({data, datasets, onItemClicked}) {
   const labels = createTemporalLabels(data);
   const options = {
     responsive: true,
@@ -218,35 +122,35 @@ function createMultiChart({ctx, data, datasets, onItemClicked}) {
       }]
     }
   };
-  return new Chart(ctx, {
+  return {
     type: 'line',
     data: {
       labels,
       datasets
     },
     options
-  });
+  };
 }
 
 
-export function createDaysChart(ctx, data, onItemClicked) {
+export function createDaysChart(data, onItemClicked) {
   const keys = ['Done', 'Planned'];
   const datasets = keys.map((key, i) => createColoredDataset(data, key, someColors[i]));
-  return createMultiChart({ctx, data, datasets, onItemClicked});
+  return createMultiChart({data, datasets, onItemClicked});
 }
 
-export function createPointsChart(ctx, data, onItemClicked) {
+export function createPointsChart(data, onItemClicked) {
   const keys = ['Delivered', 'Total'];
   const datasets = keys.map((key, i) => createColoredDataset(data, key, someColors[i]));
-  return createMultiChart({ctx, data, datasets, onItemClicked});
+  return createMultiChart({data, datasets, onItemClicked});
 }
 
-export function createClientChart(ctx, data, onItemClicked) {
+export function createClientChart(data, onItemClicked) {
   const datasets = createClientDatasets(data);
-  return createMultiChart({ctx, data, datasets, onItemClicked});
+  return createMultiChart({data, datasets, onItemClicked});
 }
 
-export function createFeedbacksChart(ctx, data, onItemClicked) {
+export function createFeedbacksChart(data, onItemClicked) {
   const keys = ['Client', 'Devs', 'PO', 'SM', 'Direction'];
   const valueFn = array => computeMean(array);
   const labels = createTemporalLabels(data);
@@ -271,17 +175,17 @@ export function createFeedbacksChart(ctx, data, onItemClicked) {
       }
     ]}
     };
-  return new Chart(ctx, {
+  return {
     type: 'line',
     data: {
       labels,
       datasets
     },
     options
-  });
+  };
 }
 
-export function createFeedbacksRadarChart(ctx, line) {
+export function createFeedbacksRadarChart(line) {
   const labels = [
     'Client',
     'Devs',
@@ -299,7 +203,7 @@ export function createFeedbacksRadarChart(ctx, line) {
       computeMean(line.SMNumbers),
     ].map(n => Number.isNaN(n) ? 0 : n)
   }];
-  return new Chart(ctx, {
+  return {
     type: 'radar',
     options: {
       scale: {
@@ -313,5 +217,5 @@ export function createFeedbacksRadarChart(ctx, line) {
       labels,
       datasets
     },
-  });
+  };
 }

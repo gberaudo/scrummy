@@ -1,4 +1,6 @@
 import React, { PureComponent} from "react";
+import ChartJs from 'chart.js';
+
 
 export class Chart extends PureComponent {
   constructor(props) {
@@ -15,7 +17,8 @@ export class Chart extends PureComponent {
     if (this.props.data) {
       const el = this.el;
       const ctx = el.getContext('2d');
-      this.chart_ = this.props.factory(ctx, this.props.data, this.props.select);
+      const spec = this.props.factory(this.props.data, this.props.select);
+      this.chart_ = new ChartJs(ctx, spec);
     }
   }
 
