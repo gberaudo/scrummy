@@ -140,7 +140,7 @@ export function createDaysChart(data, onItemClicked) {
 }
 
 export function createPointsChart(data, onItemClicked) {
-  const keys = ['Delivered', 'Total'];
+  const keys = ['Started', 'Delivered', 'Total'];
   const datasets = keys.map((key, i) => createColoredDataset(data, key, someColors[i]));
   return createMultiChart({data, datasets, onItemClicked});
 }
