@@ -1,14 +1,13 @@
-import React, { Component} from "react";
+import React, { PureComponent} from "react";
 import { createProjectTable } from "../tables/project.tables";
 
 
-export class ProjectTableComponent extends Component {
+export class ProjectTableComponent extends PureComponent {
   componentDidMount() {
     const el = this.el;
-    const project = this.props.project;
-    const projectData = this.props.data.filter(l => l.Project === project);
+    const data = this.props.data;
     const onLineSelected = this.props.select;
-    this.table = createProjectTable(el, projectData, onLineSelected);
+    this.table = createProjectTable(el, data, onLineSelected);
   }
   
   componentWillUnmount() {
