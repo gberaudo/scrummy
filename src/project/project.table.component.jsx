@@ -1,5 +1,5 @@
 import React, { PureComponent} from "react";
-import { createProjectTable } from "../tables/project.tables";
+import { createProjectTable } from "./project.tables";
 
 
 export class ProjectTableComponent extends PureComponent {

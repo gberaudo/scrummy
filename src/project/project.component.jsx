@@ -1,8 +1,8 @@
 import React, { Component} from "react";
-import { ProjectTableComponent } from "./project.table.component";
-import {Chart} from './chart.component';
-import {createVelocityChart, createPointsChart, createHealthChart, createDaysChart, createFeedbacksChart, createFeedbacksRadarChart, createClientChart} from '../charts/project.charts';
-import { Pre } from "./pre.component";
+import { ProjectTableComponent } from "./project.table.component.jsx";
+import {Chart} from '../react/chart.component.jsx';
+import {createVelocityChart, createPointsChart, createHealthChart, createDaysChart, createFeedbacksChart, createFeedbacksRadarChart, createClientChart} from './project.charts';
+import { Pre } from "../react/pre.component.jsx";
 
 export class ProjectPage extends Component {
   constructor(props) {

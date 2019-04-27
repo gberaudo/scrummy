@@ -1,6 +1,6 @@
 import React, { Component} from "react";
 import { computeGlobalHealthIndicator } from "../indicators";
-import { Score } from "./score.component";
+import { Score } from "./score.component.jsx";
 
 export class GlobalHealth extends Component {
   constructor(props) {

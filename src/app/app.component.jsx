@@ -1,8 +1,7 @@
 import React, { Component} from "react";
-import { MainPage } from "./main.component";
-import { ProjectPage } from "./project.component";
-import { GlobalHealth } from "./globalHealth.component";
-import { EditData } from "./editdata.component";
+import { MainPage } from "../main/main.component.jsx";
+import { ProjectPage } from "../project/project.component.jsx";
+import { EditData } from "./editdata.component.jsx";
 
 
 export class AppPage extends Component {
@@ -42,7 +41,6 @@ export class AppPage extends Component {
     } else {
       content = (
         <>
-          <GlobalHealth data={this.state.data}></GlobalHealth>
           <MainPage changeProject={this.onProjectChange} data={this.state.data}></MainPage>
         </>
       );

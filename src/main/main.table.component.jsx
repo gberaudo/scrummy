@@ -1,5 +1,5 @@
 import React, { Component} from "react";
-import { createMainTable } from "../tables/main.tables";
+import { createMainTable } from "./main.tables.js";
 
 
 export class MainTableComponent extends Component {

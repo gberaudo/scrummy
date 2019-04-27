@@ -1,5 +1,7 @@
 import React, { Component} from "react";
-import { MainTableComponent } from "./main.table.component";
+import { MainTableComponent } from "./main.table.component.jsx";
+import { GlobalHealth } from "./globalHealth.component.jsx";
+
 
 
 export class MainPage extends Component {
@@ -15,6 +17,7 @@ export class MainPage extends Component {
   render() {
     return (
       <div>
+        <GlobalHealth data={this.props.data}></GlobalHealth>
         <MainTableComponent data={this.props.data} changeProject={this.changeProject}></MainTableComponent>
       </div>
     );
