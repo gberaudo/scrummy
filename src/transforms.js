@@ -10,66 +10,63 @@ export const FEEDBACK_VALUES = {
   '--': 0
 }
 
-
-export function parseFeedback(str) {
-  const feedbacks = str.split(',').map(s => s.trim());
-  return feedbacks.map(f => FEEDBACK_VALUES[f]);
+export function parseFeedback (str) {
+  const feedbacks = str.split(',').map(s => s.trim())
+  return feedbacks.map(f => FEEDBACK_VALUES[f])
 };
 
-function parseSerialNumberDate(numberDate, timezoneOffset) {
-  return new Date(Date.UTC(0, 0, numberDate, 0, timezoneOffset));
+function parseSerialNumberDate (numberDate, timezoneOffset) {
+  return new Date(Date.UTC(0, 0, numberDate, 0, timezoneOffset))
 }
 
-export function normalizeData(data) {
+export function normalizeData (data) {
   // Remove empty lines
-  data = data.filter(e => !!e.Project);
+  data = data.filter(e => !!e.Project)
 
   // Sort lines in anti-chronological order.
   data = data.sort((l1, l2) => {
     const d1 = l2.To - l1.To
-    return d1 !== 0 ? d1 : l2.From - l1.From;
-  });
+    return d1 !== 0 ? d1 : l2.From - l1.From
+  })
 
-  
-  const timezoneOffset = new Date().getTimezoneOffset();
+  const timezoneOffset = new Date().getTimezoneOffset()
   data.forEach(l => {
     // Parse Serial-number dates as JS Date objects
-    l.From = parseSerialNumberDate(l.From, timezoneOffset);
-    l.To = parseSerialNumberDate(l.To, timezoneOffset);
+    l.From = parseSerialNumberDate(l.From, timezoneOffset)
+    l.To = parseSerialNumberDate(l.To, timezoneOffset)
 
     // Parse feedbacks
-    l.ClientNumbers = parseFeedback(l.Client);
-    l.DevsNumbers = parseFeedback(l.Devs);
-    l.PONumbers = parseFeedback(l.PO);
-    l.SMNumbers = parseFeedback(l.SM);
-    l.DirectionNumbers = parseFeedback(l.Direction);
+    l.ClientNumbers = parseFeedback(l.Client)
+    l.DevsNumbers = parseFeedback(l.Devs)
+    l.PONumbers = parseFeedback(l.PO)
+    l.SMNumbers = parseFeedback(l.SM)
+    l.DirectionNumbers = parseFeedback(l.Direction)
 
     // Truncate velocities
-    l.Velocity = Math.round(l.Velocity * 10) / 10;
-  });
-  return data;
+    l.Velocity = Math.round(l.Velocity * 10) / 10
+  })
+  return data
 };
 
-export function extractDataSince(data, since) {
-  const extract = [];
+export function extractDataSince (data, since) {
+  const extract = []
   for (const line of data) {
     if (line.To < since) {
-        break;
+      break
     }
-    extract.push(line);
+    extract.push(line)
   }
-  return extract;
+  return extract
 };
 
-export function extractDistinctProjects(data) {
-  const extract = [];
-  const knownProjects = new Set();
+export function extractDistinctProjects (data) {
+  const extract = []
+  const knownProjects = new Set()
   for (const line of data) {
     if (!knownProjects.has(line.Project)) {
-      knownProjects.add(line.Project);
-      extract.push(line);
+      knownProjects.add(line.Project)
+      extract.push(line)
     }
   }
-  return extract;
+  return extract
 }
-
