@@ -11,6 +11,7 @@ export const FEEDBACK_VALUES = {
 }
 
 export function parseFeedback (str) {
+  str = str || '';
   const feedbacks = str.split(',').map(s => s.trim())
   return feedbacks.map(f => FEEDBACK_VALUES[f])
 };
