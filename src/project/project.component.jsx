@@ -28,12 +28,14 @@ export class ProjectPage extends Component {
   }
 
   render() {
+    const jiraUrlPrefix = `https://jira.camptocamp.com/secure/RapidBoard.jspa?rapidView=${this.projectData[0].JiraProject}`;
     const details = this.state.line ? (
       <>
         <Pre json={this.state.line}></Pre>
         <div style={{display: 'inline-block', verticalAlign: 'top'}}>
           <Chart data={this.state.line} factory={createFeedbacksRadarChart}></Chart>
         </div>
+        <a href={`${jiraUrlPrefix}&view=reporting&chart=sprintRetrospective&sprint=${this.state.line['JiraSprint']}`} target="_blank" rel="noopener">Jira report</a>
       </>
     ) : (
       <></>
@@ -41,6 +43,8 @@ export class ProjectPage extends Component {
     const data = this.state.data;
     return (
       <div>
+        <a href={`${jiraUrlPrefix}&view=reporting&chart=controlChart`} target="_blank" rel="noopener">Jira control chart</a>
+        <br />
         <button onClick={() => this.filterDataOnDate(-1000)}>forever</button>
         <button onClick={() => this.filterDataOnDate(-200)}>last 200 days</button>
         <button onClick={() => this.filterDataOnDate(-100)}>last 100 days</button>
