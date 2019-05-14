@@ -35,7 +35,12 @@ export class ProjectPage extends Component {
         <div style={{display: 'inline-block', verticalAlign: 'top'}}>
           <Chart data={this.state.line} factory={createFeedbacksRadarChart}></Chart>
         </div>
-        <a href={`${jiraUrlPrefix}&view=reporting&chart=sprintRetrospective&sprint=${this.state.line['JiraSprint']}`} target="_blank" rel="noopener">Jira report</a>
+        <div>
+          <span>Jira&nbsp;
+          <a href={`${jiraUrlPrefix}&view=reporting&chart=sprintRetrospective&sprint=${this.state.line['JiraSprint']}`} target="_blank" rel="noopener">Sprint</a>&nbsp;
+          <a href={`${jiraUrlPrefix}&view=reporting&chart=burndownChart&sprint=${this.state.line['JiraSprint']}`} target="_blank" rel="noopener">Burndown</a>
+          </span>
+        </div>
       </>
     ) : (
       <></>
