@@ -43,8 +43,8 @@ export function normalizeData (data) {
     l.SMNumbers = parseFeedback(l.SM)
     l.DirectionNumbers = parseFeedback(l.Direction)
 
-    // Truncate velocities
-    l.Velocity = Math.round(l.Velocity * 10) / 10
+    // Compute velocities
+    l.Velocity = Math.round(10 * l.Delivered / l.Done) / 10
   })
   return data
 };
