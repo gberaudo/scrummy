@@ -5,7 +5,7 @@ export const FEEDBACK_VALUES = {
   '=': 4,
   '=-': 3,
   '~': 4,
-  'NSOW': 4,
+  'NSOW': 3,
   '-': 2,
   '--': 0
 }
